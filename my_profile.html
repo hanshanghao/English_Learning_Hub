@@ -886,48 +886,64 @@
             font-weight: 300;
         }
 
-        /* ============ SCROLL TO TOP ============ */
-        .scroll-top {
+        /* ============ FLOATING BUTTONS ============ */
+        .float-btn {
             position: fixed;
-            bottom: 28px;
             right: 28px;
             z-index: 150;
             width: 52px;
             height: 52px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--accent-1), var(--accent-5));
             border: 2px solid rgba(255,255,255,0.25);
             box-shadow: 0 8px 30px rgba(0,0,0,0.4);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            text-decoration: none;
             opacity: 0;
             transform: translateY(20px);
             pointer-events: none;
             transition: all 0.4s ease;
         }
 
-        .scroll-top.visible {
+        .float-btn.visible {
             opacity: 1;
             transform: translateY(0);
             pointer-events: auto;
         }
 
-        .scroll-top.dimmed {
+        .float-btn.dimmed {
             opacity: 0.25;
         }
 
-        .scroll-top svg {
+        .float-btn svg {
             width: 24px;
             height: 24px;
             fill: white;
         }
 
-        .scroll-top:hover {
+        .float-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 12px 36px rgba(185, 131, 255, 0.55);
             opacity: 1 !important;
+        }
+
+        .scroll-top {
+            bottom: 92px;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-5));
+        }
+
+        .scroll-top:hover {
+            box-shadow: 0 12px 36px rgba(185, 131, 255, 0.55);
+        }
+
+        .home-btn {
+            bottom: 28px;
+            background: linear-gradient(135deg, #4d96ff, #6bcb77);
+        }
+
+        .home-btn:hover {
+            box-shadow: 0 12px 36px rgba(77, 150, 255, 0.55);
         }
 
         /* ============ RESPONSIVE ============ */
@@ -1306,11 +1322,18 @@
     </script>
 
     <!-- Scroll to Top Button -->
-    <button class="scroll-top" id="scrollTop" title="Scroll to top" aria-label="Scroll to top">
+    <button class="float-btn scroll-top" id="scrollTop" title="Scroll to top" aria-label="Scroll to top">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M12 4l-8 8h5v8h6v-8h5l-8-8z"/>
         </svg>
     </button>
+
+    <!-- Home Button -->
+    <a class="float-btn home-btn" id="homeBtn" href="index.html" title="Home" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 3l10 9h-3v8h-5v-6h-4v6H5v-8H2l10-9z"/>
+        </svg>
+    </a>
 
     <!-- Resume Selection Modal -->
     <div class="modal-overlay" id="resumeModal" onclick="if(event.target===this)closeModal()">
@@ -1374,47 +1397,58 @@
             if (e.key === 'Escape') closeModal();
         });
 
-        // Scroll to top button
-        const scrollTopBtn = document.getElementById('scrollTop');
+        // Floating buttons (scroll to top + home)
+        const floatBtns = [
+            document.getElementById('scrollTop'),
+            document.getElementById('homeBtn')
+        ];
         let dimTimer;
 
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 350) {
-                scrollTopBtn.classList.add('visible');
-            } else {
-                scrollTopBtn.classList.remove('visible', 'dimmed');
-                clearTimeout(dimTimer);
-            }
-        });
-
-        scrollTopBtn.addEventListener('click', function() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        scrollTopBtn.addEventListener('mouseenter', function() {
-            clearTimeout(dimTimer);
-            scrollTopBtn.classList.remove('dimmed');
-        });
-
-        scrollTopBtn.addEventListener('mouseleave', function() {
-            startDimTimer();
-        });
+        function setFloatingVisible(visible) {
+            floatBtns.forEach(function(btn) {
+                if (visible) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible', 'dimmed');
+                }
+            });
+            if (!visible) clearTimeout(dimTimer);
+        }
 
         function startDimTimer() {
             clearTimeout(dimTimer);
             dimTimer = setTimeout(function() {
-                scrollTopBtn.classList.add('dimmed');
+                floatBtns.forEach(function(btn) {
+                    btn.classList.add('dimmed');
+                });
             }, 2000);
         }
 
-        scrollTopBtn.addEventListener('touchstart', function() {
-            clearTimeout(dimTimer);
-            scrollTopBtn.classList.remove('dimmed');
-        }, { passive: true });
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 350) {
+                setFloatingVisible(true);
+            } else {
+                setFloatingVisible(false);
+            }
+        });
 
-        document.addEventListener('scroll', function() {
-            startDimTimer();
-        }, true);
+        document.getElementById('scrollTop').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        floatBtns.forEach(function(btn) {
+            btn.addEventListener('mouseenter', function() {
+                clearTimeout(dimTimer);
+                btn.classList.remove('dimmed');
+            });
+            btn.addEventListener('mouseleave', startDimTimer);
+            btn.addEventListener('touchstart', function() {
+                clearTimeout(dimTimer);
+                btn.classList.remove('dimmed');
+            }, { passive: true });
+        });
+
+        document.addEventListener('scroll', startDimTimer, true);
     </script>
 </body>
 </html>
