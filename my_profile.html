@@ -1073,6 +1073,42 @@
             border-radius: 8px;
         }
 
+        #certLockForm {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 6px;
+        }
+
+        #certLockInput {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text);
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #certLockInput:focus {
+            border-color: var(--text-accent);
+        }
+
+        #certLockError {
+            display: none;
+            color: var(--accent-1);
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        .lock-submit {
+            width: 100%;
+            justify-content: center;
+        }
+
         .modal-option {
             display: flex;
             align-items: center;
@@ -1238,7 +1274,7 @@
             <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zm0 2a7 7 0 110-14 7 7 0 010 14zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM1 11h3v2H1v-2zm19 0h3v2h-3v-2zM3.5 3.5l2.1 2.1-1.4 1.4-2.1-2.1 1.4-1.4zm16.3 16.3l-2.1-2.1 1.4-1.4 2.1 2.1-1.4 1.4zM20.5 3.5l1.4 1.4-2.1 2.1-1.4-1.4 2.1-2.1zM4.2 19.8l-1.4-1.4 2.1-2.1 1.4 1.4-2.1 2.1z"/></svg>
             <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 109.8 9.8z"/></svg>
         </button>
-        <a href="javascript:void(0)" onclick="openCertModal('view')" class="nav-btn">Certificates</a>
+        <a href="javascript:void(0)" onclick="openCertLock()" class="nav-btn">Certificates</a>
         <a href="javascript:void(0)" onclick="openModal('download')" class="nav-btn">Download CV</a>
         <div class="hamburger" onclick="toggleMenu()">
             <span></span><span></span><span></span>
@@ -1679,6 +1715,20 @@
         </div>
     </div>
 
+    <!-- Certificates Password Lock Modal -->
+    <div class="modal-overlay" id="certLockModal" onclick="if(event.target===this)closeCertLock()">
+        <div class="modal">
+            <button class="modal-close" onclick="closeCertLock()">&times;</button>
+            <h3 id="certLockTitle">&#128274; Secure Access</h3>
+            <p id="certLockSubtitle">Enter the password to open the certificates.</p>
+            <form id="certLockForm" onsubmit="return submitCertLock(event)">
+                <input type="password" id="certLockInput" placeholder="Enter password" autocomplete="off" />
+                <p id="certLockError">Incorrect password. Please try again.</p>
+                <button type="submit" class="btn btn-primary lock-submit">Unlock</button>
+            </form>
+        </div>
+    </div>
+
     <script>
         let currentAction = 'view';
         const proLink = document.getElementById('optProHref');
@@ -1713,7 +1763,7 @@
         });
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') { closeModal(); closeCertModal(); }
+            if (e.key === 'Escape') { closeModal(); closeCertModal(); closeCertLock(); }
         });
 
         // Certificates modal
@@ -1750,6 +1800,47 @@
                 setTimeout(closeCertModal, 200);
             });
         });
+
+        // Certificates password lock
+        const CERT_PASSWORD_HASH = 'd0fa377cd9844282e8c49101317e8807881b77874de47240a27401df9881ca52';
+
+        async function sha256(text) {
+            const data = new TextEncoder().encode(text);
+            const digest = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(digest)).map(function(b) {
+                return b.toString(16).padStart(2, '0');
+            }).join('');
+        }
+
+        function openCertLock() {
+            document.getElementById('certLockError').style.display = 'none';
+            document.getElementById('certLockInput').value = '';
+            document.getElementById('certLockModal').classList.add('active');
+            setTimeout(function() {
+                document.getElementById('certLockInput').focus();
+            }, 150);
+        }
+
+        function closeCertLock() {
+            document.getElementById('certLockModal').classList.remove('active');
+        }
+
+        async function submitCertLock(event) {
+            event.preventDefault();
+            const inputEl = document.getElementById('certLockInput');
+            const errorEl = document.getElementById('certLockError');
+            const entered = inputEl.value || '';
+            const hash = await sha256(entered);
+            if (hash === CERT_PASSWORD_HASH) {
+                closeCertLock();
+                openCertModal('view');
+            } else {
+                errorEl.style.display = 'block';
+                inputEl.value = '';
+                inputEl.focus();
+            }
+            return false;
+        }
 
         // Floating buttons (scroll to top + home)
         const floatBtns = [
