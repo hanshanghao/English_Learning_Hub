@@ -336,6 +336,10 @@
             transition: all 0.3s;
         }
 
+        .nav-btn + .nav-btn {
+            margin-left: 12px;
+        }
+
         .nav-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
@@ -1218,6 +1222,7 @@
             <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zm0 2a7 7 0 110-14 7 7 0 010 14zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM1 11h3v2H1v-2zm19 0h3v2h-3v-2zM3.5 3.5l2.1 2.1-1.4 1.4-2.1-2.1 1.4-1.4zm16.3 16.3l-2.1-2.1 1.4-1.4 2.1 2.1-1.4 1.4zM20.5 3.5l1.4 1.4-2.1 2.1-1.4-1.4 2.1-2.1zM4.2 19.8l-1.4-1.4 2.1-2.1 1.4 1.4-2.1 2.1z"/></svg>
             <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 109.8 9.8z"/></svg>
         </button>
+        <a href="javascript:void(0)" onclick="openCertModal('view')" class="nav-btn">Certificates</a>
         <a href="javascript:void(0)" onclick="openModal('download')" class="nav-btn">Download CV</a>
         <div class="hamburger" onclick="toggleMenu()">
             <span></span><span></span><span></span>
@@ -1591,6 +1596,73 @@
         </div>
     </div>
 
+    <!-- Certificates Selection Modal -->
+    <div class="modal-overlay" id="certModal" onclick="if(event.target===this)closeCertModal()">
+        <div class="modal">
+            <button class="modal-close" onclick="closeCertModal()">&times;</button>
+            <h3 id="certTitle">My Certificates</h3>
+            <p id="certSubtitle">Please choose which certificate / document you'd like.</p>
+            <div class="modal-options">
+                <a href="Advance_Diploma_I_T.pdf" class="modal-option cert-link">
+                    <div class="opt-icon">&#128220;</div>
+                    <div class="opt-text">
+                        <h4>Advance Diploma in IT.pdf</h4>
+                        <small>Advance Diploma in Information Technology</small>
+                    </div>
+                </a>
+                <a href="Chinese_Mandarin_Certificates_TW.pdf" class="modal-option cert-link">
+                    <div class="opt-icon">&#127760;</div>
+                    <div class="opt-text">
+                        <h4>Chinese / Mandarin Certificates TW.pdf</h4>
+                        <small>Chinese &amp; Mandarin language certificates (Taiwan)</small>
+                    </div>
+                </a>
+                <a href="ELTA_Teaching_Service_Certificate.jpg" class="modal-option cert-link">
+                    <div class="opt-icon">&#127979;</div>
+                    <div class="opt-text">
+                        <h4>ELTA Teaching Service Certificate.jpg</h4>
+                        <small>English Language Teaching Assistant service certificate</small>
+                    </div>
+                </a>
+                <a href="English-certificate_CEFR-C2-Proficient_hanshanghao.pdf" class="modal-option cert-link">
+                    <div class="opt-icon">&#127468;&#127463;</div>
+                    <div class="opt-text">
+                        <h4>English Certificate CEFR-C2 Proficient.pdf</h4>
+                        <small>English proficiency certificate (CEFR C2 Proficient)</small>
+                    </div>
+                </a>
+                <a href="K12_Education_Teaching_Training_Certificate.jpg" class="modal-option cert-link">
+                    <div class="opt-icon">&#127891;</div>
+                    <div class="opt-text">
+                        <h4>K12 Education Teaching Training Certificate.jpg</h4>
+                        <small>K-12 education teaching training certificate</small>
+                    </div>
+                </a>
+                <a href="Report_English_CEFR-C2-Proficient_hanshanghao.pdf" class="modal-option cert-link">
+                    <div class="opt-icon">&#128202;</div>
+                    <div class="opt-text">
+                        <h4>English Report CEFR-C2 Proficient.pdf</h4>
+                        <small>English proficiency report (CEFR C2 Proficient)</small>
+                    </div>
+                </a>
+                <a href="TESOL:TEFL_Certificate.pdf" class="modal-option cert-link">
+                    <div class="opt-icon">&#127758;</div>
+                    <div class="opt-text">
+                        <h4>TESOL / TEFL Certificate.pdf</h4>
+                        <small>TESOL / TEFL teaching qualification certificate</small>
+                    </div>
+                </a>
+                <a href="韓尚昊 (Shang Hao Han) - TESOL Grade Transcript - World TESOL Academy.pdf" class="modal-option cert-link">
+                    <div class="opt-icon">&#128218;</div>
+                    <div class="opt-text">
+                        <h4>TESOL Grade Transcript - World TESOL Academy.pdf</h4>
+                        <small>韩尚昊 (Shang Hao Han) TESOL grade transcript</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
         let currentAction = 'view';
         const proLink = document.getElementById('optProHref');
@@ -1625,7 +1697,42 @@
         });
 
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Escape') { closeModal(); closeCertModal(); }
+        });
+
+        // Certificates modal
+        const certLinks = document.querySelectorAll('#certModal .cert-link');
+
+        function openCertModal(action) {
+            const title = document.getElementById('certTitle');
+            const subtitle = document.getElementById('certSubtitle');
+            certLinks.forEach(function(link) {
+                if (action === 'download') {
+                    link.setAttribute('download', '');
+                } else {
+                    link.removeAttribute('download');
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener');
+                }
+            });
+            if (action === 'download') {
+                title.textContent = 'Download Certificates';
+                subtitle.textContent = 'Please choose which certificate / document you would like to download.';
+            } else {
+                title.textContent = 'My Certificates';
+                subtitle.textContent = "Please choose which certificate / document you'd like to view.";
+            }
+            document.getElementById('certModal').classList.add('active');
+        }
+
+        function closeCertModal() {
+            document.getElementById('certModal').classList.remove('active');
+        }
+
+        certLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                setTimeout(closeCertModal, 200);
+            });
         });
 
         // Floating buttons (scroll to top + home)
