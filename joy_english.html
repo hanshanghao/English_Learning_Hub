@@ -379,12 +379,15 @@
       <div class="p-step"><span class="p-dot" id="pd2">2</span></div>
       <div class="p-line"></div>
       <div class="p-step"><span class="p-dot" id="pd3">3</span></div>
+      <div class="p-line"></div>
+      <div class="p-step"><span class="p-dot" id="pd4">4</span></div>
     </div>
 
     <nav class="steps">
       <button class="step-btn active" onclick="showPanel('present','this')">📖 Presentation<span class="m">4 min</span></button>
       <button class="step-btn" onclick="showPanel('practice','this')">✏️ Practice<span class="m">7 min</span></button>
       <button class="step-btn" onclick="showPanel('closure','this')">🎮 Closure Game<span class="m">4 min</span></button>
+      <button class="step-btn" onclick="showPanel('demo','this')">📋 Demo_Class<span class="m">Chart</span></button>
     </nav>
 
     <!-- ============ 1. PRESENTATION ============ -->
@@ -520,6 +523,59 @@
       </div>
     </section>
 
+    <!-- ============ 4. DEMO CLASS ============ -->
+    <section id="demo" class="panel">
+      <h2>📋 Demo_Class · What is it?</h2>
+
+      <div class="demo-head" style="text-align:center; margin-bottom:14px;">
+        <span style="font-size:34px;font-weight:700;color:var(--orange);">WHAT IS IT?</span>
+      </div>
+
+      <div class="vocab-grid" style="grid-template-columns:repeat(3, 1fr); max-width:600px; margin:0 auto 20px;">
+        <div class="vocab-card" style="cursor:default;">
+          <span class="emoji">👜</span><span class="word">BAG</span>
+        </div>
+        <div class="vocab-card" style="cursor:default;">
+          <span class="emoji">🎩</span><span class="word">HAT</span>
+        </div>
+        <div class="vocab-card" style="cursor:default;">
+          <span class="emoji">🥅</span><span class="word">NET</span>
+        </div>
+      </div>
+
+      <div class="demo-compare" style="max-width:680px; margin:0 auto 22px;">
+        <div class="pattern-box" style="background:linear-gradient(160deg, rgba(230,244,255,0.9), rgba(255,255,255,0.7)); border-color:rgba(77,195,255,0.9);">
+          <div class="pattern" style="text-align:center;">
+            <div style="margin-bottom:8px;">
+              <span style="color:var(--blue-dark);">It is a bag.</span>
+              <span style="color:var(--orange); font-size:26px;">&nbsp;&nbsp;→&nbsp;&nbsp;</span>
+              <span style="color:var(--green);">It's a bag.</span>
+            </div>
+            <div style="margin-bottom:8px;">
+              <span style="color:var(--blue-dark);">It is a hat.</span>
+              <span style="color:var(--orange); font-size:26px;">&nbsp;&nbsp;→&nbsp;&nbsp;</span>
+              <span style="color:var(--green);">It's a hat.</span>
+            </div>
+            <div>
+              <span style="color:var(--blue-dark);">It is a net.</span>
+              <span style="color:var(--orange); font-size:26px;">&nbsp;&nbsp;→&nbsp;&nbsp;</span>
+              <span style="color:var(--green);">It's a net.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-equality" style="text-align:center;">
+        <div class="pattern-box" style="background:linear-gradient(160deg, rgba(255,243,217,0.9), rgba(255,255,255,0.7)); border-color:rgba(255,210,138,0.9); max-width:600px; margin:0 auto;">
+          <div class="pattern" style="font-size:26px; color:var(--orange);">
+            It is &nbsp;<b>=</b>&nbsp; It's
+          </div>
+          <div style="font-size:18px; color:var(--blue-dark); font-weight:700; margin-top:4px;">LONG &nbsp;&nbsp;→&nbsp;&nbsp; SHORT</div>
+          <div style="font-size:16px; color:#888; font-weight:700; margin-top:4px;">SAME MEANING</div>
+        </div>
+      </div>
+    </section>
+
     <div class="footer-note">Joy English · English only · Great job, everyone! 🌟</div>
   </div>
 
@@ -571,9 +627,9 @@
       document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       // update progress dots
-      const map = { present: 1, practice: 2, closure: 3 };
+      const map = { present: 1, practice: 2, closure: 3, demo: 4 };
       const cur = map[id] || 1;
-      for (let n = 1; n <= 3; n++) {
+      for (let n = 1; n <= 4; n++) {
         document.getElementById('pd' + n).classList.toggle('done', n <= cur);
         document.getElementById('pd' + n).textContent = n;
       }
