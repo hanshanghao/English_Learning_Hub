@@ -986,6 +986,28 @@
             margin-bottom: 4px;
         }
 
+        .line-card .line-link {
+            display: inline-block;
+            margin-top: 14px;
+            padding: 10px 20px;
+            border-radius: 24px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, var(--accent-3), var(--accent-4));
+            border: 1px solid var(--card-border);
+            transition: all 0.3s;
+            max-width: 100%;
+            word-break: break-word;
+        }
+
+        .line-card .line-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(107, 203, 119, 0.4);
+            border-color: var(--card-border-hover);
+        }
+
         /* ============ FOOTER ============ */
         footer {
             padding: 40px 60px;
@@ -1554,11 +1576,14 @@
                 <h4><span class="i18n" data-i18n="contact.phone">Phone</span></h4>
                 <p>0905941824</p>
             </a>
-            <a href="line://ti/p/0905941824" class="contact-card line-card">
-                <img src="Line_QR_Code 2023-11-14 at 20.40.56.jpeg" alt="Line QR Code" class="qr-img">
+            <div class="contact-card line-card">
+                <img src="My_line_codeSH__82870279.jpg" alt="Line QR Code" class="qr-img">
                 <h4><span class="i18n" data-i18n="contact.line">Add Line</span></h4>
                 <p>0905941824</p>
-            </a>
+                <a href="https://line.me/ti/p/lBpnzqyQzF" target="_blank" rel="noopener" class="line-link">
+                    <span class="i18n" data-i18n="contact.lineLink">Secondary: Add via Line link</span>
+                </a>
+            </div>
             <a href="https://maps.google.com/?q=Neipu+Township,Pingtung,Taiwan" target="_blank" class="contact-card">
                 <div class="icon">&#128205;</div>
                 <h4><span class="i18n" data-i18n="contact.location">Location</span></h4>
@@ -1846,6 +1871,7 @@
                 "contact.email": "Email",
                 "contact.phone": "Phone",
                 "contact.line": "Add Line",
+                "contact.lineLink": "Secondary: Add via Line link",
                 "contact.location": "Location",
                 "contact.locationValue": "Neipu Township, Pingtung City, 912017 Taiwan",
                 "footer.name": "Han Shang Hao",
@@ -1955,6 +1981,7 @@
                 "contact.email": "電子郵件",
                 "contact.phone": "電話",
                 "contact.line": "加入 Line",
+                "contact.lineLink": "備用：透過 Line 連結加入",
                 "contact.location": "所在位置",
                 "contact.locationValue": "台灣屏東縣內埔鄉 912017",
                 "footer.name": "韓尚昊",
