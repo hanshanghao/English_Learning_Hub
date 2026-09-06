@@ -982,6 +982,19 @@
             margin: 0 auto 10px;
         }
 
+        .line-card .qr-link {
+            display: inline-block;
+            text-decoration: none;
+            border-radius: 14px;
+            line-height: 0;
+            transition: all 0.3s;
+        }
+
+        .line-card .qr-link:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 10px 26px rgba(107, 203, 119, 0.45);
+        }
+
         .line-card h4 {
             margin-bottom: 4px;
         }
@@ -1577,7 +1590,9 @@
                 <p>0905941824</p>
             </a>
             <div class="contact-card line-card">
-                <img src="My_line_codeSH__82870279.jpg" alt="Line QR Code" class="qr-img">
+                <a href="https://line.me/ti/p/lBpnzqyQzF" target="_blank" rel="noopener" class="qr-link" title="Add via Line">
+                    <img src="My_line_codeSH__82870279.jpg" alt="Line QR Code - click to add" class="qr-img">
+                </a>
                 <h4><span class="i18n" data-i18n="contact.line">Add Line</span></h4>
                 <p>0905941824</p>
                 <a href="https://line.me/ti/p/lBpnzqyQzF" target="_blank" rel="noopener" class="line-link">
