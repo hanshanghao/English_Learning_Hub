@@ -6,7 +6,7 @@
     <title>Han Shang Hao | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&family=Sacramento&family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
     <script>
         (function () {
             var stored = null;
@@ -17,6 +17,22 @@
                 stored = prefersLight ? 'light' : 'dark';
             }
             document.documentElement.setAttribute('data-theme', stored);
+
+            // ----- Language detection (default English) -----
+            (function () {
+                function detectLang() {
+                    var stored = null;
+                    try { stored = localStorage.getItem('lang'); } catch (e) {}
+                    if (stored === 'en' || stored === 'zh') return stored;
+                    var navLangs = '';
+                    try { navLangs = (navigator.language || navigator.languages[0] || '').toLowerCase(); } catch (e) {}
+                    if (navLangs.indexOf('zh') === 0 || navLangs.indexOf('zh-tw') === 0 || navLangs.indexOf('zh-hant') === 0) {
+                        return 'zh';
+                    }
+                    return 'en';
+                }
+                document.documentElement.setAttribute('data-lang', detectLang());
+            })();
         })();
     </script>
     <style>
@@ -172,6 +188,18 @@
 
         body {
             transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        :root[data-lang="zh"] body {
+            font-family: 'Noto Sans TC', 'Poppins', sans-serif;
+        }
+
+        :root[data-lang="zh"] .name-chinese,
+        :root[data-lang="zh"] .name-english,
+        :root[data-lang="zh"] .section-title,
+        :root[data-lang="zh"] .about-heading,
+        :root[data-lang="zh"] .about-lead {
+            font-family: 'Noto Serif TC', 'Noto Sans TC', serif;
         }
 
         @media (prefers-color-scheme: light) {
@@ -385,6 +413,32 @@
             width: 20px;
             height: 20px;
             fill: var(--text);
+        }
+
+        .lang-toggle {
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-5));
+            border: 1px solid var(--card-border);
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            font-family: 'Noto Sans TC', 'Poppins', sans-serif;
+            line-height: 1;
+            transition: all 0.3s;
+            margin-right: 10px;
+            padding: 0;
+        }
+
+        .lang-toggle:hover {
+            transform: translateY(-2px) rotate(12deg);
+            box-shadow: 0 8px 25px rgba(185, 131, 255, 0.4);
         }
 
         .theme-toggle .moon-icon {
@@ -1264,18 +1318,21 @@
     <nav>
         <div class="logo">SH.Han</div>
         <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li><a href="#home"><span class="i18n" data-i18n="nav.home">Home</span></a></li>
+            <li><a href="#about"><span class="i18n" data-i18n="nav.about">About</span></a></li>
+            <li><a href="#skills"><span class="i18n" data-i18n="nav.skills">Skills</span></a></li>
+            <li><a href="#projects"><span class="i18n" data-i18n="nav.projects">Projects</span></a></li>
+            <li><a href="#contact"><span class="i18n" data-i18n="nav.contact">Contact</span></a></li>
         </ul>
         <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme">
             <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 17a5 5 0 100-10 5 5 0 000 10zm0 2a7 7 0 110-14 7 7 0 010 14zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM1 11h3v2H1v-2zm19 0h3v2h-3v-2zM3.5 3.5l2.1 2.1-1.4 1.4-2.1-2.1 1.4-1.4zm16.3 16.3l-2.1-2.1 1.4-1.4 2.1 2.1-1.4 1.4zM20.5 3.5l1.4 1.4-2.1 2.1-1.4-1.4 2.1-2.1zM4.2 19.8l-1.4-1.4 2.1-2.1 1.4 1.4-2.1 2.1z"/></svg>
             <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 109.8 9.8z"/></svg>
         </button>
-        <a href="javascript:void(0)" onclick="openCertLock()" class="nav-btn">Certificates</a>
-        <a href="javascript:void(0)" onclick="openModal('download')" class="nav-btn">Download CV</a>
+        <button type="button" class="lang-toggle" id="langToggle" aria-label="Switch language">
+            <span id="langLabel">中</span>
+        </button>
+        <a href="javascript:void(0)" onclick="openCertLock()" class="nav-btn"><span class="i18n" data-i18n="nav.certificates">Certificates</span></a>
+        <a href="javascript:void(0)" onclick="openModal('download')" class="nav-btn"><span class="i18n" data-i18n="nav.downloadCv">Download CV</span></a>
         <div class="hamburger" onclick="toggleMenu()">
             <span></span><span></span><span></span>
         </div>
@@ -1284,14 +1341,12 @@
     <!-- Hero -->
     <section class="hero" id="home">
         <div class="hero-text">
-            <div class="greeting">&#10024; WELCOME TO MY WORLD</div>
+            <div class="greeting"><span class="i18n" data-i18n="hero.welcome">WELCOME TO MY WORLD</span></div>
             <div class="name-chinese">韓尚昊</div>
-            <div class="name-english">Han Shang Hao</div>
-            <div class="title-badge">&#128187; IT | Data | Equipment | Web &amp; Digital Marketing</div>
+            <div class="name-english"><span class="i18n" data-i18n="hero.englishName">Han Shang Hao</span></div>
+            <div class="title-badge">&#128187; <span class="i18n" data-i18n="hero.tagline">IT | Data | Equipment | Web &amp; Digital Marketing</span></div>
             <p class="hero-desc">
-                A multidisciplinary professional who enjoys solving problems — combining
-                technology, operations, equipment services, customer support, and digital
-                marketing to make everyday work more efficient.
+                <span class="i18n" data-i18n="hero.desc">A multidisciplinary professional who enjoys solving problems — combining technology, operations, equipment services, customer support, and digital marketing to make everyday work more efficient.</span>
             </p>
             <div class="hero-buttons">
                 <a href="javascript:void(0)" onclick="openModal('view')" class="btn btn-primary">
@@ -1299,13 +1354,13 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                     </svg>
-                    View Resume Online
+                    <span class="i18n" data-i18n="hero.viewResume">View Resume Online</span>
                 </a>
                 <a href="javascript:void(0)" onclick="openModal('download')" class="btn btn-outline">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                     </svg>
-                    Download Resume
+                    <span class="i18n" data-i18n="hero.downloadResume">Download Resume</span>
                 </a>
             </div>
         </div>
@@ -1314,126 +1369,108 @@
             <!-- Replace with your photo path -->
             <img src="profile.jpg" alt="Han Shang Hao" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
             <div class="photo-placeholder" style="display:none;">&#128100;</div>
-            <div class="floating-chip chip-1">&#127942; 20+ Years Experience</div>
-            <div class="floating-chip chip-2">&#127793; Available for Work</div>
-            <div class="floating-chip chip-3">&#11088; 50+ Projects</div>
+            <div class="floating-chip chip-1">&#127942; <span class="i18n" data-i18n="hero.chipExperience">20+ Years Experience</span></div>
+            <div class="floating-chip chip-2">&#127793; <span class="i18n" data-i18n="hero.chipAvailable">Available for Work</span></div>
+            <div class="floating-chip chip-3">&#11088; <span class="i18n" data-i18n="hero.chipProjects">50+ Projects</span></div>
         </div>
     </section>
 
     <!-- About -->
     <section class="about reveal" id="about">
-        <h2 class="section-title">About Me</h2>
-        <p class="section-subtitle">Data Management, I/T, Equipment Services, Customer Service, Digital Marketing, Hardware, Electronic Devices &amp; Mechanical Equipment.</p>
+        <h2 class="section-title"><span class="i18n" data-i18n="about.title">About Me</span></h2>
+        <p class="section-subtitle"><span class="i18n" data-i18n="about.subtitle">Data Management, I/T, Equipment Services, Customer Service, Digital Marketing, Hardware, Electronic Devices &amp; Mechanical Equipment.</span></p>
 
-        <p class="about-lead">Hi, I'm Shang-Hao Han</p>
+        <p class="about-lead"><span class="i18n" data-i18n="about.lead">Hi, I'm Shang-Hao Han</span></p>
         <p class="about-text">
-            a multidisciplinary professional with experience in IT, data management, technical operations,
-            equipment services, customer service, website management, and digital marketing.
+            <span class="i18n" data-i18n="about.p1">a multidisciplinary professional with experience in IT, data management, technical operations, equipment services, customer service, website management, and digital marketing.</span>
         </p>
         <p class="about-text">
-            My career has taken me through different industries and countries, including Pakistan, Malaysia, and
-            Taiwan. Along the way, I've worked with data, technology, equipment, customers, websites, operational
-            teams, and digital platforms. This diverse experience has helped me develop a practical approach to work:
-            understand the problem, find a workable solution, and keep improving the process.
+            <span class="i18n" data-i18n="about.p2">My career has taken me through different industries and countries, including Pakistan, Malaysia, and Taiwan. Along the way, I've worked with data, technology, equipment, customers, websites, operational teams, and digital platforms. This diverse experience has helped me develop a practical approach to work: understand the problem, find a workable solution, and keep improving the process.</span>
         </p>
 
-        <h3 class="about-heading">What I Do</h3>
-        <p class="about-text" style="text-align:center;">My experience covers several connected areas:</p>
+        <h3 class="about-heading"><span class="i18n" data-i18n="about.whatIDo">What I Do</span></h3>
+        <p class="about-text" style="text-align:center;"><span class="i18n" data-i18n="about.whatIDoIntro">My experience covers several connected areas:</span></p>
         <div class="about-cards">
             <div class="about-card" style="--about-accent:#4d96ff;">
                 <div class="card-icon">&#128187;</div>
-                <h4>IT &amp; Technology</h4>
-                <p>IT support, hardware and software installation, troubleshooting, database management, system coordination, technical documentation, and digital tools.</p>
+                <h4><span class="i18n" data-i18n="about.cardItTitle">IT &amp; Technology</span></h4>
+                <p><span class="i18n" data-i18n="about.cardItDesc">IT support, hardware and software installation, troubleshooting, database management, system coordination, technical documentation, and digital tools.</span></p>
             </div>
             <div class="about-card" style="--about-accent:#6bcb77;">
                 <div class="card-icon">&#128200;</div>
-                <h4>Data &amp; Operations</h4>
-                <p>Data entry and verification, quality control, reporting, database coordination, workflow monitoring, operational analysis, documentation, and team supervision.</p>
+                <h4><span class="i18n" data-i18n="about.cardDataTitle">Data &amp; Operations</span></h4>
+                <p><span class="i18n" data-i18n="about.cardDataDesc">Data entry and verification, quality control, reporting, database coordination, workflow monitoring, operational analysis, documentation, and team supervision.</span></p>
             </div>
             <div class="about-card" style="--about-accent:#ffd93d;">
                 <div class="card-icon">&#128295;</div>
-                <h4>Technical Services &amp; Equipment</h4>
-                <p>Equipment operation, air-conditioning installation and maintenance, preventive maintenance, troubleshooting, quality inspection, technician coordination, and service operations.</p>
+                <h4><span class="i18n" data-i18n="about.cardEquipTitle">Technical Services &amp; Equipment</span></h4>
+                <p><span class="i18n" data-i18n="about.cardEquipDesc">Equipment operation, air-conditioning installation and maintenance, preventive maintenance, troubleshooting, quality inspection, technician coordination, and service operations.</span></p>
             </div>
             <div class="about-card" style="--about-accent:#ff6b6b;">
                 <div class="card-icon">&#127760;</div>
-                <h4>Web &amp; Digital</h4>
-                <p>WordPress and HTML website development, website administration, content management, basic SEO, GitHub projects, and Google Ads/PPC campaign management.</p>
+                <h4><span class="i18n" data-i18n="about.cardWebTitle">Web &amp; Digital</span></h4>
+                <p><span class="i18n" data-i18n="about.cardWebDesc">WordPress and HTML website development, website administration, content management, basic SEO, GitHub projects, and Google Ads/PPC campaign management.</span></p>
             </div>
             <div class="about-card" style="--about-accent:#b983ff;">
                 <div class="card-icon">&#128172;</div>
-                <h4>Customer Service &amp; Coordination</h4>
-                <p>Customer support, technical enquiries, complaint handling, document processing, client communication, scheduling, team coordination, and working with people from diverse backgrounds.</p>
+                <h4><span class="i18n" data-i18n="about.cardCsTitle">Customer Service &amp; Coordination</span></h4>
+                <p><span class="i18n" data-i18n="about.cardCsDesc">Customer support, technical enquiries, complaint handling, document processing, client communication, scheduling, team coordination, and working with people from diverse backgrounds.</span></p>
             </div>
         </div>
 
-        <h3 class="about-heading">A Career Built Around Adaptability</h3>
-        <p class="about-text">I've never been limited to just one type of work.</p>
+        <h3 class="about-heading"><span class="i18n" data-i18n="about.adaptTitle">A Career Built Around Adaptability</span></h3>
+        <p class="about-text"><span class="i18n" data-i18n="about.adaptP1">I've never been limited to just one type of work.</span></p>
         <p class="about-text">
-            I've worked in logistics, telecommunications, government-related data operations, international visa and
-            customer-service environments, equipment services, education, web development, and digital marketing.
+            <span class="i18n" data-i18n="about.adaptP2">I've worked in logistics, telecommunications, government-related data operations, international visa and customer-service environments, equipment services, education, web development, and digital marketing.</span>
         </p>
-        <p class="about-text">That variety has become one of my strengths.</p>
+        <p class="about-text"><span class="i18n" data-i18n="about.adaptP3">That variety has become one of my strengths.</span></p>
         <p class="about-text">
-            I can move between technical and people-focused responsibilities, work independently or as part of a team,
-            learn unfamiliar systems, and adapt to changing requirements. I enjoy roles where I can combine technology,
-            organisation, problem-solving, and communication to make everyday work more efficient.
+            <span class="i18n" data-i18n="about.adaptP4">I can move between technical and people-focused responsibilities, work independently or as part of a team, learn unfamiliar systems, and adapt to changing requirements. I enjoy roles where I can combine technology, organisation, problem-solving, and communication to make everyday work more efficient.</span>
         </p>
 
-        <h3 class="about-heading">My Approach</h3>
+        <h3 class="about-heading"><span class="i18n" data-i18n="about.approachTitle">My Approach</span></h3>
         <p class="about-text">
-            I believe good work is about more than technical knowledge. It requires reliability, curiosity, attention
-            to detail, communication, and the willingness to keep learning. Whether I'm troubleshooting equipment,
-            checking data, maintaining a website, analysing digital performance, supporting a customer, coordinating a
-            team, or learning a new system, I approach the task with patience and responsibility.
+            <span class="i18n" data-i18n="about.approachP1">I believe good work is about more than technical knowledge. It requires reliability, curiosity, attention to detail, communication, and the willingness to keep learning. Whether I'm troubleshooting equipment, checking data, maintaining a website, analysing digital performance, supporting a customer, coordinating a team, or learning a new system, I approach the task with patience and responsibility.</span>
         </p>
         <p class="about-text">
-            I'm comfortable asking questions, investigating problems, learning new tools, and finding practical solutions.
+            <span class="i18n" data-i18n="about.approachP2">I'm comfortable asking questions, investigating problems, learning new tools, and finding practical solutions.</span>
         </p>
 
-        <h3 class="about-heading">Continuing to Grow</h3>
+        <h3 class="about-heading"><span class="i18n" data-i18n="about.growthTitle">Continuing to Grow</span></h3>
         <p class="about-text">
-            Since building my career across different countries and industries, I've continued to develop my technical
-            and language skills while establishing my professional life in Taiwan. Today, I'm looking for opportunities
-            where my technical experience, operational background, digital skills, and customer-service experience can
-            create real value.
+            <span class="i18n" data-i18n="about.growthP1">Since building my career across different countries and industries, I've continued to develop my technical and language skills while establishing my professional life in Taiwan. Today, I'm looking for opportunities where my technical experience, operational background, digital skills, and customer-service experience can create real value.</span>
         </p>
         <p class="about-text">
-            I'm open to a wide range of opportunities — from IT and data-related roles to technical operations,
-            equipment services, customer support, digital marketing, website management, and administrative or
-            coordination positions.
+            <span class="i18n" data-i18n="about.growthP2">I'm open to a wide range of opportunities — from IT and data-related roles to technical operations, equipment services, customer support, digital marketing, website management, and administrative or coordination positions.</span>
         </p>
         <p class="about-text">
-            I'm also interested in working with individuals and businesses that need help with websites, digital tools,
-            online advertising, technical tasks, data, or day-to-day operational challenges.
+            <span class="i18n" data-i18n="about.growthP3">I'm also interested in working with individuals and businesses that need help with websites, digital tools, online advertising, technical tasks, data, or day-to-day operational challenges.</span>
         </p>
         <p class="about-text">
-            I don't believe in being defined by a single job title. I believe in being useful, learning continuously,
-            and finding ways to make things work better.
+            <span class="i18n" data-i18n="about.growthP4">I don't believe in being defined by a single job title. I believe in being useful, learning continuously, and finding ways to make things work better.</span>
         </p>
 
-        <h3 class="about-heading">Let's Work Together</h3>
+        <h3 class="about-heading"><span class="i18n" data-i18n="about.workTogetherTitle">Let's Work Together</span></h3>
         <p class="about-text" style="text-align:center;">
-            If you have a project, business need, technical challenge, or job opportunity that matches my experience,
-            I'd be happy to connect. Let's see what we can build, improve, or solve together.
+            <span class="i18n" data-i18n="about.workTogetherP">If you have a project, business need, technical challenge, or job opportunity that matches my experience, I'd be happy to connect. Let's see what we can build, improve, or solve together.</span>
         </p>
 
         <div class="stats">
             <div class="stat">
                 <div class="stat-number">5+</div>
-                <div class="stat-label">Industries</div>
+                <div class="stat-label"><span class="i18n" data-i18n="about.statIndustries">Industries</span></div>
             </div>
             <div class="stat">
                 <div class="stat-number">3</div>
-                <div class="stat-label">Countries</div>
+                <div class="stat-label"><span class="i18n" data-i18n="about.statCountries">Countries</span></div>
             </div>
             <div class="stat">
                 <div class="stat-number">10+</div>
-                <div class="stat-label">Skill Areas</div>
+                <div class="stat-label"><span class="i18n" data-i18n="about.statSkills">Skill Areas</span></div>
             </div>
             <div class="stat">
                 <div class="stat-number">∞</div>
-                <div class="stat-label">Curiosity</div>
+                <div class="stat-label"><span class="i18n" data-i18n="about.statCuriosity">Curiosity</span></div>
             </div>
         </div>
     </section>
@@ -1441,42 +1478,42 @@
 
     <!-- Skills -->
     <section class="reveal" id="skills">
-        <h2 class="section-title">My Skills</h2>
-        <p class="section-subtitle">What I offer</p>
+        <h2 class="section-title"><span class="i18n" data-i18n="skills.title">My Skills</span></h2>
+        <p class="section-subtitle"><span class="i18n" data-i18n="skills.subtitle">What I offer</span></p>
         <div class="skills">
             <div class="skill-card" style="--card-accent:#4d96ff;">
                 <div class="skill-icon">&#128187;</div>
-                <h3>Web Development</h3>
-                <p>Modern HTML5, CSS3, JavaScript, and responsive design for pixel-perfect websites.</p>
+                <h3><span class="i18n" data-i18n="skills.webTitle">Web Development</span></h3>
+                <p><span class="i18n" data-i18n="skills.webDesc">Modern HTML5, CSS3, JavaScript, and responsive design for pixel-perfect websites.</span></p>
             </div>
             <div class="skill-card" style="--card-accent:#ff6b6b;">
                 <div class="skill-icon">&#127912;</div>
-                <h3>UI/UX Design</h3>
-                <p>Crafting intuitive interfaces and delightful user experiences with a design-first mindset.</p>
+                <h3><span class="i18n" data-i18n="skills.uiTitle">UI/UX Design</span></h3>
+                <p><span class="i18n" data-i18n="skills.uiDesc">Crafting intuitive interfaces and delightful user experiences with a design-first mindset.</span></p>
             </div>
             <div class="skill-card" style="--card-accent:#6bcb77;">
                 <div class="skill-icon">&#128200;</div>
-                <h3>Data &amp; Analytics</h3>
-                <p>Transforming raw data into meaningful insights with visualization and reporting.</p>
+                <h3><span class="i18n" data-i18n="skills.dataTitle">Data &amp; Analytics</span></h3>
+                <p><span class="i18n" data-i18n="skills.dataDesc">Transforming raw data into meaningful insights with visualization and reporting.</span></p>
             </div>
             <div class="skill-card" style="--card-accent:#ffd93d;">
                 <div class="skill-icon">&#9889;</div>
-                <h3>Problem Solving</h3>
-                <p>Creative thinking and strong analytical skills to tackle complex technical challenges.</p>
+                <h3><span class="i18n" data-i18n="skills.problemTitle">Problem Solving</span></h3>
+                <p><span class="i18n" data-i18n="skills.problemDesc">Creative thinking and strong analytical skills to tackle complex technical challenges.</span></p>
             </div>
         </div>
     </section>
 
     <!-- Projects -->
     <section class="reveal" id="projects">
-        <h2 class="section-title">Featured Projects</h2>
-        <p class="section-subtitle">Some of my recent work</p>
+        <h2 class="section-title"><span class="i18n" data-i18n="projects.title">Featured Projects</span></h2>
+        <p class="section-subtitle"><span class="i18n" data-i18n="projects.subtitle">Some of my recent work</span></p>
         <div class="projects">
             <div class="project-card" style="--p-accent-1:#4d96ff;--p-accent-2:#b983ff;">
                 <div class="project-img">&#128421;</div>
                 <div class="project-body">
-                    <h3>Smart Dashboard</h3>
-                    <p>A real-time analytics dashboard with interactive charts and customizable widgets.</p>
+                    <h3><span class="i18n" data-i18n="projects.p1Title">Smart Dashboard</span></h3>
+                    <p><span class="i18n" data-i18n="projects.p1Desc">A real-time analytics dashboard with interactive charts and customizable widgets.</span></p>
                     <span class="tag">React</span>
                     <span class="tag">Node.js</span>
                 </div>
@@ -1484,8 +1521,8 @@
             <div class="project-card" style="--p-accent-1:#ff6b6b;--p-accent-2:#ffd93d;">
                 <div class="project-img">&#128241;</div>
                 <div class="project-body">
-                    <h3>E-commerce App</h3>
-                    <p>Fully-featured online store with secure payments, cart management, and admin panel.</p>
+                    <h3><span class="i18n" data-i18n="projects.p2Title">E-commerce App</span></h3>
+                    <p><span class="i18n" data-i18n="projects.p2Desc">Fully-featured online store with secure payments, cart management, and admin panel.</span></p>
                     <span class="tag">Vue</span>
                     <span class="tag">Firebase</span>
                 </div>
@@ -1493,8 +1530,8 @@
             <div class="project-card" style="--p-accent-1:#6bcb77;--p-accent-2:#4d96ff;">
                 <div class="project-img">&#127919;</div>
                 <div class="project-body">
-                    <h3>Brand Portfolio</h3>
-                    <p>An elegant showcase of creative works with smooth animations and storytelling.</p>
+                    <h3><span class="i18n" data-i18n="projects.p3Title">Brand Portfolio</span></h3>
+                    <p><span class="i18n" data-i18n="projects.p3Desc">An elegant showcase of creative works with smooth animations and storytelling.</span></p>
                     <span class="tag">Portfolio</span>
                     <span class="tag">GSAP</span>
                 </div>
@@ -1504,35 +1541,35 @@
 
     <!-- Contact -->
     <section class="contact reveal" id="contact">
-        <h2 class="section-title">Get In Touch</h2>
-        <p class="section-subtitle">I'd love to hear from you!</p>
+        <h2 class="section-title"><span class="i18n" data-i18n="contact.title">Get In Touch</span></h2>
+        <p class="section-subtitle"><span class="i18n" data-i18n="contact.subtitle">I'd love to hear from you!</span></p>
         <div class="contact-grid">
             <a href="mailto:shanghao.han28@gmail.com" class="contact-card">
                 <div class="icon">&#9993;</div>
-                <h4>Email</h4>
+                <h4><span class="i18n" data-i18n="contact.email">Email</span></h4>
                 <p>shanghao.han28@gmail.com</p>
             </a>
             <a href="tel:0905941824" class="contact-card">
                 <div class="icon">&#9742;</div>
-                <h4>Phone</h4>
+                <h4><span class="i18n" data-i18n="contact.phone">Phone</span></h4>
                 <p>0905941824</p>
             </a>
             <a href="line://ti/p/0905941824" class="contact-card line-card">
                 <img src="Line_QR_Code 2023-11-14 at 20.40.56.jpeg" alt="Line QR Code" class="qr-img">
-                <h4>Add Line</h4>
+                <h4><span class="i18n" data-i18n="contact.line">Add Line</span></h4>
                 <p>0905941824</p>
             </a>
             <a href="https://maps.google.com/?q=Neipu+Township,Pingtung,Taiwan" target="_blank" class="contact-card">
                 <div class="icon">&#128205;</div>
-                <h4>Location</h4>
-                <p>Neipu Township, Pingtung City, 912017 Taiwan</p>
+                <h4><span class="i18n" data-i18n="contact.location">Location</span></h4>
+                <p><span class="i18n" data-i18n="contact.locationValue">Neipu Township, Pingtung City, 912017 Taiwan</span></p>
             </a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Han Shang Hao &middot; Designed with &#10084; in Taiwan</p>
+        <p>&copy; 2026 <span class="i18n" data-i18n="footer.name">Han Shang Hao</span> &middot; <span class="i18n" data-i18n="footer.design">Designed with &#10084; in Taiwan</span></p>
         <div class="social-links">
             <a href="https://www.instagram.com/hanshanghao06" target="_blank" title="Instagram">
                 <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -1627,21 +1664,21 @@
     <div class="modal-overlay" id="resumeModal" onclick="if(event.target===this)closeModal()">
         <div class="modal">
             <button class="modal-close" onclick="closeModal()">&times;</button>
-            <h3 id="modalTitle">Select Resume</h3>
-            <p id="modalSubtitle">Please choose which resume you'd like.</p>
+            <h3 id="modalTitle"><span class="i18n" data-i18n="resumeModal.title">Select Resume</span></h3>
+            <p id="modalSubtitle"><span class="i18n" data-i18n="resumeModal.subtitle">Please choose which resume you'd like.</span></p>
             <div class="modal-options">
                 <a href="Resume_Pro-TW.pdf" id="optProHref" class="modal-option">
                     <div class="opt-icon">&#128218;</div>
                     <div class="opt-text">
                         <h4>Resume_Pro-TW.pdf</h4>
-                        <small>Professional / Technical resume (Traditional Chinese)</small>
+                        <small class="i18n" data-i18n="resumeModal.proDesc">Professional / Technical resume (Traditional Chinese)</small>
                     </div>
                 </a>
                 <a href="Resume_Teaching.pdf" id="optTeachHref" class="modal-option">
                     <div class="opt-icon">&#127891;</div>
                     <div class="opt-text">
                         <h4>Resume_Teaching.pdf</h4>
-                        <small>Teaching / Education resume</small>
+                        <small class="i18n" data-i18n="resumeModal.teachDesc">Teaching / Education resume</small>
                     </div>
                 </a>
             </div>
@@ -1652,63 +1689,63 @@
     <div class="modal-overlay" id="certModal" onclick="if(event.target===this)closeCertModal()">
         <div class="modal">
             <button class="modal-close" onclick="closeCertModal()">&times;</button>
-            <h3 id="certTitle">My Certificates</h3>
-            <p id="certSubtitle">Please choose which certificate / document you'd like.</p>
+            <h3 id="certTitle"><span class="i18n" data-i18n="certModal.title">My Certificates</span></h3>
+            <p id="certSubtitle"><span class="i18n" data-i18n="certModal.subtitle">Please choose which certificate / document you'd like.</span></p>
             <div class="modal-options">
                 <a href="Advance_Diploma_I_T.pdf" class="modal-option cert-link">
                     <div class="opt-icon">&#128220;</div>
                     <div class="opt-text">
                         <h4>Advance Diploma in IT.pdf</h4>
-                        <small>Advance Diploma in Information Technology</small>
+                        <small class="i18n" data-i18n="certModal.it">Advance Diploma in Information Technology</small>
                     </div>
                 </a>
                 <a href="Chinese_Mandarin_Certificates_TW.pdf" class="modal-option cert-link">
                     <div class="opt-icon">&#127760;</div>
                     <div class="opt-text">
                         <h4>Chinese / Mandarin Certificates TW.pdf</h4>
-                        <small>Chinese &amp; Mandarin language certificates (Taiwan)</small>
+                        <small class="i18n" data-i18n="certModal.mandarin">Chinese &amp; Mandarin language certificates (Taiwan)</small>
                     </div>
                 </a>
                 <a href="ELTA_Teaching_Service_Certificate.jpg" class="modal-option cert-link">
                     <div class="opt-icon">&#127979;</div>
                     <div class="opt-text">
                         <h4>ELTA Teaching Service Certificate.jpg</h4>
-                        <small>English Language Teaching Assistant service certificate</small>
+                        <small class="i18n" data-i18n="certModal.elta">English Language Teaching Assistant service certificate</small>
                     </div>
                 </a>
                 <a href="English-certificate_CEFR-C2-Proficient_hanshanghao.pdf" class="modal-option cert-link">
                     <div class="opt-icon">&#127468;&#127463;</div>
                     <div class="opt-text">
                         <h4>English Certificate CEFR-C2 Proficient.pdf</h4>
-                        <small>English proficiency certificate (CEFR C2 Proficient)</small>
+                        <small class="i18n" data-i18n="certModal.english">English proficiency certificate (CEFR C2 Proficient)</small>
                     </div>
                 </a>
                 <a href="K12_Education_Teaching_Training_Certificate.jpg" class="modal-option cert-link">
                     <div class="opt-icon">&#127891;</div>
                     <div class="opt-text">
                         <h4>K12 Education Teaching Training Certificate.jpg</h4>
-                        <small>K-12 education teaching training certificate</small>
+                        <small class="i18n" data-i18n="certModal.k12">K-12 education teaching training certificate</small>
                     </div>
                 </a>
                 <a href="Report_English_CEFR-C2-Proficient_hanshanghao.pdf" class="modal-option cert-link">
                     <div class="opt-icon">&#128202;</div>
                     <div class="opt-text">
                         <h4>English Report CEFR-C2 Proficient.pdf</h4>
-                        <small>English proficiency report (CEFR C2 Proficient)</small>
+                        <small class="i18n" data-i18n="certModal.report">English proficiency report (CEFR C2 Proficient)</small>
                     </div>
                 </a>
                 <a href="TESOL:TEFL_Certificate.pdf" class="modal-option cert-link">
                     <div class="opt-icon">&#127758;</div>
                     <div class="opt-text">
                         <h4>TESOL / TEFL Certificate.pdf</h4>
-                        <small>TESOL / TEFL teaching qualification certificate</small>
+                        <small class="i18n" data-i18n="certModal.tesol">TESOL / TEFL teaching qualification certificate</small>
                     </div>
                 </a>
                 <a href="韓尚昊 (Shang Hao Han) - TESOL Grade Transcript - World TESOL Academy.pdf" class="modal-option cert-link">
                     <div class="opt-icon">&#128218;</div>
                     <div class="opt-text">
                         <h4>TESOL Grade Transcript - World TESOL Academy.pdf</h4>
-                        <small>韩尚昊 (Shang Hao Han) TESOL grade transcript</small>
+                        <small class="i18n" data-i18n="certModal.transcript">韩尚昊 (Shang Hao Han) TESOL grade transcript</small>
                     </div>
                 </a>
             </div>
@@ -1719,17 +1756,285 @@
     <div class="modal-overlay" id="certLockModal" onclick="if(event.target===this)closeCertLock()">
         <div class="modal">
             <button class="modal-close" onclick="closeCertLock()">&times;</button>
-            <h3 id="certLockTitle">&#128274; Secure Access</h3>
-            <p id="certLockSubtitle">Enter the password to open the certificates.</p>
+            <h3 id="certLockTitle">&#128274; <span class="i18n" data-i18n="lock.title">Secure Access</span></h3>
+            <p id="certLockSubtitle"><span class="i18n" data-i18n="lock.subtitle">Enter the password to open the certificates.</span></p>
             <form id="certLockForm" onsubmit="return submitCertLock(event)">
-                <input type="password" id="certLockInput" placeholder="Enter password" autocomplete="off" />
-                <p id="certLockError">Incorrect password. Please try again.</p>
-                <button type="submit" class="btn btn-primary lock-submit">Unlock</button>
+                <input type="password" id="certLockInput" placeholder="Enter password" autocomplete="off" data-i18n-placeholder="lock.placeholder" />
+                <p id="certLockError"><span class="i18n" data-i18n="lock.error">Incorrect password. Please try again.</span></p>
+                <button type="submit" class="btn btn-primary lock-submit"><span class="i18n" data-i18n="lock.unlock">Unlock</span></button>
             </form>
         </div>
     </div>
 
     <script>
+        // ===================== I18N =====================
+        const i18n = {
+            en: {
+                "htmlLang": "en",
+                "nav.home": "Home",
+                "nav.about": "About",
+                "nav.skills": "Skills",
+                "nav.projects": "Projects",
+                "nav.contact": "Contact",
+                "nav.certificates": "Certificates",
+                "nav.downloadCv": "Download CV",
+                "hero.welcome": "WELCOME TO MY WORLD",
+                "hero.englishName": "Han Shang Hao",
+                "hero.tagline": "IT | Data | Equipment | Web & Digital Marketing",
+                "hero.desc": "A multidisciplinary professional who enjoys solving problems — combining technology, operations, equipment services, customer support, and digital marketing to make everyday work more efficient.",
+                "hero.viewResume": "View Resume Online",
+                "hero.downloadResume": "Download Resume",
+                "hero.chipExperience": "20+ Years Experience",
+                "hero.chipAvailable": "Available for Work",
+                "hero.chipProjects": "50+ Projects",
+                "about.title": "About Me",
+                "about.subtitle": "Data Management, I/T, Equipment Services, Customer Service, Digital Marketing, Hardware, Electronic Devices & Mechanical Equipment.",
+                "about.lead": "Hi, I'm Shang-Hao Han",
+                "about.p1": "a multidisciplinary professional with experience in IT, data management, technical operations, equipment services, customer service, website management, and digital marketing.",
+                "about.p2": "My career has taken me through different industries and countries, including Pakistan, Malaysia, and Taiwan. Along the way, I've worked with data, technology, equipment, customers, websites, operational teams, and digital platforms. This diverse experience has helped me develop a practical approach to work: understand the problem, find a workable solution, and keep improving the process.",
+                "about.whatIDo": "What I Do",
+                "about.whatIDoIntro": "My experience covers several connected areas:",
+                "about.cardItTitle": "IT & Technology",
+                "about.cardItDesc": "IT support, hardware and software installation, troubleshooting, database management, system coordination, technical documentation, and digital tools.",
+                "about.cardDataTitle": "Data & Operations",
+                "about.cardDataDesc": "Data entry and verification, quality control, reporting, database coordination, workflow monitoring, operational analysis, documentation, and team supervision.",
+                "about.cardEquipTitle": "Technical Services & Equipment",
+                "about.cardEquipDesc": "Equipment operation, air-conditioning installation and maintenance, preventive maintenance, troubleshooting, quality inspection, technician coordination, and service operations.",
+                "about.cardWebTitle": "Web & Digital",
+                "about.cardWebDesc": "WordPress and HTML website development, website administration, content management, basic SEO, GitHub projects, and Google Ads/PPC campaign management.",
+                "about.cardCsTitle": "Customer Service & Coordination",
+                "about.cardCsDesc": "Customer support, technical enquiries, complaint handling, document processing, client communication, scheduling, team coordination, and working with people from diverse backgrounds.",
+                "about.adaptTitle": "A Career Built Around Adaptability",
+                "about.adaptP1": "I've never been limited to just one type of work.",
+                "about.adaptP2": "I've worked in logistics, telecommunications, government-related data operations, international visa and customer-service environments, equipment services, education, web development, and digital marketing.",
+                "about.adaptP3": "That variety has become one of my strengths.",
+                "about.adaptP4": "I can move between technical and people-focused responsibilities, work independently or as part of a team, learn unfamiliar systems, and adapt to changing requirements. I enjoy roles where I can combine technology, organisation, problem-solving, and communication to make everyday work more efficient.",
+                "about.approachTitle": "My Approach",
+                "about.approachP1": "I believe good work is about more than technical knowledge. It requires reliability, curiosity, attention to detail, communication, and the willingness to keep learning. Whether I'm troubleshooting equipment, checking data, maintaining a website, analysing digital performance, supporting a customer, coordinating a team, or learning a new system, I approach the task with patience and responsibility.",
+                "about.approachP2": "I'm comfortable asking questions, investigating problems, learning new tools, and finding practical solutions.",
+                "about.growthTitle": "Continuing to Grow",
+                "about.growthP1": "Since building my career across different countries and industries, I've continued to develop my technical and language skills while establishing my professional life in Taiwan. Today, I'm looking for opportunities where my technical experience, operational background, digital skills, and customer-service experience can create real value.",
+                "about.growthP2": "I'm open to a wide range of opportunities — from IT and data-related roles to technical operations, equipment services, customer support, digital marketing, website management, and administrative or coordination positions.",
+                "about.growthP3": "I'm also interested in working with individuals and businesses that need help with websites, digital tools, online advertising, technical tasks, data, or day-to-day operational challenges.",
+                "about.growthP4": "I don't believe in being defined by a single job title. I believe in being useful, learning continuously, and finding ways to make things work better.",
+                "about.workTogetherTitle": "Let's Work Together",
+                "about.workTogetherP": "If you have a project, business need, technical challenge, or job opportunity that matches my experience, I'd be happy to connect. Let's see what we can build, improve, or solve together.",
+                "about.statIndustries": "Industries",
+                "about.statCountries": "Countries",
+                "about.statSkills": "Skill Areas",
+                "about.statCuriosity": "Curiosity",
+                "skills.title": "My Skills",
+                "skills.subtitle": "What I offer",
+                "skills.webTitle": "Web Development",
+                "skills.webDesc": "Modern HTML5, CSS3, JavaScript, and responsive design for pixel-perfect websites.",
+                "skills.uiTitle": "UI/UX Design",
+                "skills.uiDesc": "Crafting intuitive interfaces and delightful user experiences with a design-first mindset.",
+                "skills.dataTitle": "Data & Analytics",
+                "skills.dataDesc": "Transforming raw data into meaningful insights with visualization and reporting.",
+                "skills.problemTitle": "Problem Solving",
+                "skills.problemDesc": "Creative thinking and strong analytical skills to tackle complex technical challenges.",
+                "projects.title": "Featured Projects",
+                "projects.subtitle": "Some of my recent work",
+                "projects.p1Title": "Smart Dashboard",
+                "projects.p1Desc": "A real-time analytics dashboard with interactive charts and customizable widgets.",
+                "projects.p2Title": "E-commerce App",
+                "projects.p2Desc": "Fully-featured online store with secure payments, cart management, and admin panel.",
+                "projects.p3Title": "Brand Portfolio",
+                "projects.p3Desc": "An elegant showcase of creative works with smooth animations and storytelling.",
+                "contact.title": "Get In Touch",
+                "contact.subtitle": "I'd love to hear from you!",
+                "contact.email": "Email",
+                "contact.phone": "Phone",
+                "contact.line": "Add Line",
+                "contact.location": "Location",
+                "contact.locationValue": "Neipu Township, Pingtung City, 912017 Taiwan",
+                "footer.name": "Han Shang Hao",
+                "footer.design": "Designed with ❤ in Taiwan",
+                "resumeModal.title": "Select Resume",
+                "resumeModal.subtitle": "Please choose which resume you'd like.",
+                "resumeModal.proDesc": "Professional / Technical resume (Traditional Chinese)",
+                "resumeModal.teachDesc": "Teaching / Education resume",
+                "resumeModal.downloadTitle": "Download Resume",
+                "resumeModal.downloadSubtitle": "Please choose which CV you would like to download.",
+                "resumeModal.viewTitle": "View Resume Online",
+                "resumeModal.viewSubtitle": "Please choose which CV you would like to view.",
+                "certModal.title": "My Certificates",
+                "certModal.subtitle": "Please choose which certificate / document you'd like.",
+                "certModal.it": "Advance Diploma in Information Technology",
+                "certModal.mandarin": "Chinese & Mandarin language certificates (Taiwan)",
+                "certModal.elta": "English Language Teaching Assistant service certificate",
+                "certModal.english": "English proficiency certificate (CEFR C2 Proficient)",
+                "certModal.k12": "K-12 education teaching training certificate",
+                "certModal.report": "English proficiency report (CEFR C2 Proficient)",
+                "certModal.tesol": "TESOL / TEFL teaching qualification certificate",
+                "certModal.transcript": "Shang Hao Han TESOL grade transcript",
+                "certModal.downloadTitle": "Download Certificates",
+                "certModal.downloadSubtitle": "Please choose which certificate / document you would like to download.",
+                "certModal.viewSubtitle": "Please choose which certificate / document you'd like to view.",
+                "lock.title": "Secure Access",
+                "lock.subtitle": "Enter the password to open the certificates.",
+                "lock.error": "Incorrect password. Please try again.",
+                "lock.unlock": "Unlock",
+                "lock.placeholder": "Enter password",
+                "lang.switchTo": "中"
+            },
+            zh: {
+                "htmlLang": "zh-Hant-TW",
+                "nav.home": "首頁",
+                "nav.about": "關於我",
+                "nav.skills": "專長",
+                "nav.projects": "專案",
+                "nav.contact": "聯絡",
+                "nav.certificates": "證書",
+                "nav.downloadCv": "下載履歷",
+                "hero.welcome": "歡迎來到我的世界",
+                "hero.englishName": "韓尚昊",
+                "hero.tagline": "資訊科技 | 資料 | 設備 | 網站行銷與數位行銷",
+                "hero.desc": "一位熱衷於解決問題的多領域專業人士——結合科技、營運、設備服務、客戶支援與數位行銷，讓日常工作更有效率。",
+                "hero.viewResume": "線上瀏覽履歷",
+                "hero.downloadResume": "下載履歷",
+                "hero.chipExperience": "20年以上經驗",
+                "hero.chipAvailable": "可接受工作邀約",
+                "hero.chipProjects": "50多個專案",
+                "about.title": "關於我",
+                "about.subtitle": "資料管理、資訊科技、設備服務、客戶服務、數位行銷、硬體、電子裝置與機械設備。",
+                "about.lead": "你好，我是韓尚昊 (Shang-Hao Han)",
+                "about.p1": "一位擁有資訊科技、資料管理、技術營運、設備服務、客戶服務、網站管理與數位行銷經驗的多領域專業人士。",
+                "about.p2": "我的職涯橫跨不同的產業與國家，包括巴基斯坦、馬來西亞與台灣。一路上，我曾處理資料、科技、設備、客戶、網站、營運團隊與數位平台等工作。這些多元的經驗幫助我培養了一套務實的工作方法：了解問題、找出可行的解決方案，並持續改善流程。",
+                "about.whatIDo": "我的專長領域",
+                "about.whatIDoIntro": "我的經驗涵蓋幾個相互關聯的領域：",
+                "about.cardItTitle": "資訊科技與技術",
+                "about.cardItDesc": "IT 支援、軟硬體安裝、故障排除、資料庫管理、系統協調、技術文件與數位工具。",
+                "about.cardDataTitle": "資料與營運",
+                "about.cardDataDesc": "資料輸入與驗證、品質控管、報表製作、資料庫協調、流程監控、營運分析、文件處理與團隊督導。",
+                "about.cardEquipTitle": "技術服務與設備",
+                "about.cardEquipDesc": "設備操作、空調安裝與維護、預防性保養、故障排除、品質檢驗、技術人員協調與服務營運。",
+                "about.cardWebTitle": "網站與數位",
+                "about.cardWebDesc": "WordPress 與 HTML 網站開發、網站管理、內容管理、基礎 SEO、GitHub 專案與 Google Ads／PPC 廣告活動管理。",
+                "about.cardCsTitle": "客戶服務與協調",
+                "about.cardCsDesc": "客戶支援、技術諮詢、客訴處理、文件辦理、客戶溝通、排程、團隊協調，以及與不同背景的人共事。",
+                "about.adaptTitle": "建立在適應力之上的職涯",
+                "about.adaptP1": "我從未把自己局限於單一類型的工作。",
+                "about.adaptP2": "我曾從事物流、電信、政府相關資料營運、國際簽證與客戶服務環境、設備服務、教育、網站開發與數位行銷等工作。",
+                "about.adaptP3": "這種多元性已成為我的優勢之一。",
+                "about.adaptP4": "我能在技術性與人際導向的職責之間靈活轉換，能獨立工作也能團隊合作，能快速學習陌生的系統，並適應不斷變化的需求。我喜歡能結合科技、組織力、問題解決與溝通，讓日常工作更有效率的工作角色。",
+                "about.approachTitle": "我的工作理念",
+                "about.approachP1": "我相信好的工作不只是技術知識，更需要可靠性、好奇心、注重細節、良好的溝通以及持續學習的意願。無論是排除設備故障、核對資料、維護網站、分析數位績效、支援客戶、協調團隊，還是學習新系統，我都以耐心與責任心來完成任務。",
+                "about.approachP2": "我樂於提出問題、調查問題、學習新工具，並尋找實用的解決方案。",
+                "about.growthTitle": "持續成長",
+                "about.growthP1": "在橫跨不同國家與產業的職涯中，我持續精進技術與語言能力，同時在台灣建立我的專業生活。如今，我正在尋找能讓我的技術經驗、營運背景、數位技能與客戶服務經驗真正發揮價值的機會。",
+                "about.growthP2": "我對廣泛的職涯機會保持開放——從資訊科技與資料相關的職位，到技術營運、設備服務、客戶支援、數位行銷、網站管理，以及行政或協調職位。",
+                "about.growthP3": "我也樂於協助需要網站、數位工具、線上廣告、技術任務、資料或日常營運問題解決的個人與企業。",
+                "about.growthP4": "我不相信一個人該被單一職稱所定義。我相信的是：成為有用的人、持續學習，並找到讓事情運作得更好的方式。",
+                "about.workTogetherTitle": "讓我們合作吧",
+                "about.workTogetherP": "如果你有符合我經驗的專案、商業需求、技術挑戰或工作機會，我很樂意與你聯繫。讓我們一起看看能建構、改善或解決什麼。",
+                "about.statIndustries": "產業",
+                "about.statCountries": "國家",
+                "about.statSkills": "專業領域",
+                "about.statCuriosity": "好奇心",
+                "skills.title": "我的專長",
+                "skills.subtitle": "我能提供的服務",
+                "skills.webTitle": "網站開發",
+                "skills.webDesc": "使用現代 HTML5、CSS3、JavaScript 與響應式設計，打造完美像素的網站。",
+                "skills.uiTitle": "UI／UX 設計",
+                "skills.uiDesc": "以設計優先的思維，打造直覺的介面與愉悅的使用者體驗。",
+                "skills.dataTitle": "資料與分析",
+                "skills.dataDesc": "透過視覺化與報表，將原始資料轉化為有意義的洞察。",
+                "skills.problemTitle": "問題解決",
+                "skills.problemDesc": "以創意思考與強大的分析能力，解決複雜的技術挑戰。",
+                "projects.title": "精選專案",
+                "projects.subtitle": "我近期的一些作品",
+                "projects.p1Title": "智慧儀表板",
+                "projects.p1Desc": "一個具備互動式圖表與可自訂小工具的即時分析儀表板。",
+                "projects.p2Title": "電子商務應用程式",
+                "projects.p2Desc": "具備安全付款、購物車管理與管理後台的完整線上商店。",
+                "projects.p3Title": "品牌作品集",
+                "projects.p3Desc": "以流暢動畫與說故事方式呈現創意作品的優雅展示。",
+                "contact.title": "與我聯繫",
+                "contact.subtitle": "很期待收到你的訊息！",
+                "contact.email": "電子郵件",
+                "contact.phone": "電話",
+                "contact.line": "加入 Line",
+                "contact.location": "所在位置",
+                "contact.locationValue": "台灣屏東縣內埔鄉 912017",
+                "footer.name": "韓尚昊",
+                "footer.design": "設計於台灣，充滿愛心",
+                "resumeModal.title": "選擇履歷",
+                "resumeModal.subtitle": "請選擇你要的履歷。",
+                "resumeModal.proDesc": "專業／技術履歷（繁體中文）",
+                "resumeModal.teachDesc": "教學／教育履歷",
+                "resumeModal.downloadTitle": "下載履歷",
+                "resumeModal.downloadSubtitle": "請選擇你要下載的履歷。",
+                "resumeModal.viewTitle": "線上瀏覽履歷",
+                "resumeModal.viewSubtitle": "請選擇你要瀏覽的履歷。",
+                "certModal.title": "我的證書",
+                "certModal.subtitle": "請選擇你要的證書／文件。",
+                "certModal.it": "資訊科技高級文憑",
+                "certModal.mandarin": "華語／中文語言證書（台灣）",
+                "certModal.elta": "英語教學助理服務證明",
+                "certModal.english": "英語能力證明（CEFR C2 精通級）",
+                "certModal.k12": "K-12 教育教學訓練證書",
+                "certModal.report": "英語能力報告（CEFR C2 精通級）",
+                "certModal.tesol": "TESOL／TEFL 教學資格證書",
+                "certModal.transcript": "韓尚昊 TESOL 成績單",
+                "certModal.downloadTitle": "下載證書",
+                "certModal.downloadSubtitle": "請選擇你要下載的證書／文件。",
+                "certModal.viewSubtitle": "請選擇你要瀏覽的證書／文件。",
+                "lock.title": "安全存取",
+                "lock.subtitle": "請輸入密碼以開啟證書。",
+                "lock.error": "密碼錯誤，請再試一次。",
+                "lock.unlock": "解鎖",
+                "lock.placeholder": "請輸入密碼",
+                "lang.switchTo": "EN"
+            }
+        };
+
+        function currentLang() {
+            var s = document.documentElement.getAttribute('data-lang');
+            return (s === 'zh') ? 'zh' : 'en';
+        }
+
+        function t(key) {
+            var dict = i18n[currentLang()] || i18n.en;
+            return dict[key] !== undefined ? dict[key] : (i18n.en[key] !== undefined ? i18n.en[key] : key);
+        }
+
+        function applyTranslations() {
+            var lang = currentLang();
+            document.documentElement.setAttribute('lang', t('htmlLang'));
+            document.querySelectorAll('[data-i18n]').forEach(function (el) {
+                el.innerHTML = t(el.getAttribute('data-i18n'));
+            });
+            var label = document.getElementById('langLabel');
+            if (label) label.textContent = t('lang.switchTo');
+            var placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+            placeholders.forEach(function (el) {
+                el.setAttribute('placeholder', t(el.getAttribute('data-i18n-placeholder')));
+            });
+            document.title = lang === 'zh' ? '韓尚昊 | 個人作品集' : 'Han Shang Hao | Portfolio';
+        }
+
+        function switchLang() {
+            var next = currentLang() === 'zh' ? 'en' : 'zh';
+            document.documentElement.setAttribute('data-lang', next);
+            try { localStorage.setItem('lang', next); } catch (e) {}
+            applyTranslations();
+            // Re-render any open dynamic modal content
+            if (document.getElementById('resumeModal').classList.contains('active')) {
+                openModal(currentAction);
+            }
+            if (document.getElementById('certModal').classList.contains('active')) {
+                openCertModal('view');
+            }
+        }
+
+        const langToggle = document.getElementById('langToggle');
+        if (langToggle) {
+            langToggle.addEventListener('click', switchLang);
+        }
+
+        applyTranslations();
+
         let currentAction = 'view';
         const proLink = document.getElementById('optProHref');
         const teachLink = document.getElementById('optTeachHref');
@@ -1739,13 +2044,13 @@
             const title = document.getElementById('modalTitle');
             const subtitle = document.getElementById('modalSubtitle');
             if (action === 'download') {
-                title.textContent = 'Download Resume';
-                subtitle.textContent = 'Please choose which CV you would like to download.';
+                title.textContent = t('resumeModal.downloadTitle');
+                subtitle.textContent = t('resumeModal.downloadSubtitle');
                 proLink.setAttribute('download', 'Resume_Pro-TW.pdf');
                 teachLink.setAttribute('download', 'Resume_Teaching.pdf');
             } else {
-                title.textContent = 'View Resume Online';
-                subtitle.textContent = 'Please choose which CV you would like to view.';
+                title.textContent = t('resumeModal.viewTitle');
+                subtitle.textContent = t('resumeModal.viewSubtitle');
                 proLink.removeAttribute('download');
                 teachLink.removeAttribute('download');
             }
@@ -1782,11 +2087,11 @@
                 }
             });
             if (action === 'download') {
-                title.textContent = 'Download Certificates';
-                subtitle.textContent = 'Please choose which certificate / document you would like to download.';
+                title.textContent = t('certModal.downloadTitle');
+                subtitle.textContent = t('certModal.downloadSubtitle');
             } else {
-                title.textContent = 'My Certificates';
-                subtitle.textContent = "Please choose which certificate / document you'd like to view.";
+                title.textContent = t('certModal.title');
+                subtitle.textContent = t('certModal.viewSubtitle');
             }
             document.getElementById('certModal').classList.add('active');
         }
